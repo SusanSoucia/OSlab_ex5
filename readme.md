@@ -1,17 +1,21 @@
 # 重庆大学操作系统实验五<br>
 ## 五、内存管理<br>
 ### 实验内容
+
 编辑文件userapp/myalloc.c实现如下四个接口函数<br>
 malloc/free/calloc/realloc<br>
 <br>
 
 ### 数据结构
+
 ![此处显示数据结构](mdImg/structure.png)
 #### chunk结构体内的size为 实际分配的内存大小+chunk结构体在内存中占用的大小
 ![此处显示数据结构2](mdImg/structure2.png)
 
 ### 接口函数
+
 #### 一、初始化内存分配器
+
 ```C
 void *tlsf_create_with_pool(uint8_t *heap_base, size_t heap_size)
 {
@@ -25,6 +29,7 @@ void *tlsf_create_with_pool(uint8_t *heap_base, size_t heap_size)
 }
 ```
 #### 二、malloc
+
 功能：分配大小是size字节的内存块，并返回块地址<br>
 如果size是0，返回NULL<br>
 <br>
@@ -77,6 +82,7 @@ void *malloc(size_t size)
 ```
 
 #### 三、free
+
 功能：<br>
 1、释放ptr指向的内存块<br>
 2、如果ptr是NULL，直接返回<br>
@@ -118,6 +124,7 @@ sem_signal(heap_lock);  // 解锁
 ```
 
 #### 四、calloc
+
 功能：<br>
 1、为num个元素的数组分配内存，每个元素占size字节<br>
 2、把分配的内存初始化为0<br>
@@ -134,6 +141,7 @@ void *calloc(size_t num, size_t size)
 ```
 
 #### 五、realloc
+
 功能:<br>
 重新分配oldptr指向的内存块，新内存块有size字节<br>
 把旧内存块的内容复制到新内存块<br>
@@ -177,7 +185,8 @@ void *realloc(void *oldptr, size_t size)
 }
 ```
 
-#### 六、锁机制
+### 六、锁机制
+
 在这里实现锁机制，由于没有第三方库，所以应该使用实验四中实现的信号量。<br>
 使用二值信号量来控制进程时，需要注意：每一次加锁都要保证锁被正确的释放。<br>
 所以在malloc和free函数的各个分类中都要正确的加、释放锁，不要在没有释放锁的时候return<br>
